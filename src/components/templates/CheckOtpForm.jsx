@@ -1,8 +1,18 @@
+import { checkOTP } from "../../services/auth";
+
 function CheckOtpForm({ code, setCode, mobile, setStep }) {
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
+    if (code.length !== 5) return;
+
+    const { response, error } = await checkOTP(mobile, code);
+    
+    if (response) {
+      console.log(response);
+    }
+    if (error) console.log(error.response.data.message);
   };
-  
+
   return (
     <form onSubmit={submitHandler}>
       <p>تایید شماره موبایل</p>

@@ -1,4 +1,4 @@
-import { sendOTP } from "../../services/auth";
+import { sendOTP } from "services/auth";
 
 function SendOtpForm({ mobile, setMobile, setStep }) {
   const submitHandler = async (event) => {

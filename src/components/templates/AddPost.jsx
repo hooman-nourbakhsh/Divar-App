@@ -2,6 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { getCategory } from "services/admin";
 
+import styles from "styles/AddPost.module.css";
+
 function AddPost() {
   const [form, setForm] = useState({
     title: "",
@@ -22,14 +24,14 @@ function AddPost() {
       setForm({ ...form, [name]: event.target.files[0] });
     }
   };
-  
+
   const addHandler = (event) => {
     event.preventDefault();
     console.log(form);
   };
 
   return (
-    <form onChange={changeHandler}>
+    <form onChange={changeHandler} className={styles.form}>
       <h3>افزودن آگهی</h3>
 
       <label htmlFor="title">عنوان</label>

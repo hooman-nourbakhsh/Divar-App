@@ -1,10 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 import { getCategory } from "services/admin";
+import { getCookie } from "utils/cookie";
 
 import styles from "styles/AddPost.module.css";
-import { getCookie } from "utils/cookie";
 
 function AddPost() {
   const [form, setForm] = useState({
@@ -27,8 +28,14 @@ function AddPost() {
     }
   };
 
-  const addHandler = (event) => {
+  const submitHandler = (event) => {
     event.preventDefault();
+
+    if (!form.title || !form.content || !form.amount || !form.city || !form.category || !form.images)
+      return toast.error("لطفا تمام فیلدها را پر کنید");
+
+    const button = event.target[6];
+    button.disabled = true;
 
     const formData = new FormData();
     for (let item in form) {
@@ -44,12 +51,13 @@ function AddPost() {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then((res) => toast.success(res.data.message))
+      .catch((err) => toast.error(err.response.data.message))
+      .finally(() => (button.disabled = false));
   };
 
   return (
-    <form onChange={changeHandler} className={styles.form}>
+    <form onChange={changeHandler} onSubmit={submitHandler} className={styles.form}>
       <h3>افزودن آگهی</h3>
 
       <label htmlFor="title">عنوان</label>
@@ -66,17 +74,17 @@ function AddPost() {
 
       <label htmlFor="category">دسته بندی</label>
       <select name="category" id="category">
+        <option value="">دستهٔ آگهی را انتخاب کنید</option>
         {data?.data.map((category) => (
           <option key={category._id} value={category._id}>
             {category.name}
           </option>
         ))}
       </select>
-
-      <label htmlFor="images"></label>
+      <label htmlFor="images">تصویر</label>
       <input type="file" name="images" id="images" />
 
-      <button onClick={addHandler}>افزودن</button>
+      <button type="submit">افزودن</button>
     </form>
   );
 }

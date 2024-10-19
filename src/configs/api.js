@@ -28,12 +28,14 @@ api.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (error.response.status === 401 && !originalRequest._retry && originalRequest.url === "user/whoami") {
       originalRequest._retry = true;
       const res = await getNewToken();
       if (!res?.response) return;
       setCookie(res.response.data);
       return api(originalRequest);
+    } else {
+      return Promise.reject(error);
     }
   }
 );

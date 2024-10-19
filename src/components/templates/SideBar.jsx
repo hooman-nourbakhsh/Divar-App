@@ -1,14 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
-import { getCategory } from "services/admin";
+import styles from "styles/SideBar.module.css";
 
-function SideBar() {
-  const { data } = useQuery(["get-categories"], getCategory);
-  
+function SideBar({ categories }) {
   return (
-    <div>
+    <div className={styles.sideBar}>
       <h4>دسته‌ها</h4>
       <ul>
-        {data?.data.map((category) => (
+        {categories.data.map((category) => (
           <li key={category._id}>
             <img src={`${category.icon}.svg`} />
             <p>{category.name}</p>

@@ -2,7 +2,7 @@ import styles from "styles/SideBar.module.css";
 
 function SideBar({ categories }) {
   return (
-    <div className={styles.sideBar}>
+    <div className={styles.sidebar}>
       <h4>دسته‌ها</h4>
       <ul>
         {categories.data.map((category) => (
